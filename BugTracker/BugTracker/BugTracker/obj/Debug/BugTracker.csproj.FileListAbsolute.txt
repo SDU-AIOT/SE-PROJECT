@@ -1,9 +1,0 @@
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\bin\Debug\BugTracker.exe.config
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\bin\Debug\BugTracker.exe
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\bin\Debug\BugTracker.pdb
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\obj\Debug\BugTracker.csprojResolveAssemblyReference.cache
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\obj\Debug\BugTracker.LoginForm.resources
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\obj\Debug\BugTracker.Properties.Resources.resources
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\obj\Debug\BugTracker.csproj.GenerateResource.Cache
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\obj\Debug\BugTracker.exe
-C:\Users\Isco\Documents\SE-PROJECT\BugTracker\BugTracker\BugTracker\obj\Debug\BugTracker.pdb
