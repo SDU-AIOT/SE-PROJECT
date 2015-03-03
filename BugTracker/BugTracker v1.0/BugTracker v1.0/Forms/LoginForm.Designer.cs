@@ -1,4 +1,4 @@
-﻿namespace BugTracker_v1._0.Forms
+﻿namespace BugTracker_v1._0
 {
     partial class LoginForm
     {

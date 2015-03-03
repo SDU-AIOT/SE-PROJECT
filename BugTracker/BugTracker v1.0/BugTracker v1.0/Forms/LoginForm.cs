@@ -57,5 +57,15 @@ namespace BugTracker_v1._0.Forms
                 mainForm.Show();
             }
         }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void loginButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
