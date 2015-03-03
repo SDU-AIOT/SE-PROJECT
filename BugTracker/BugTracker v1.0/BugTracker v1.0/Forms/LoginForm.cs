@@ -16,7 +16,7 @@ namespace BugTracker_v1._0.Forms
     {
         private TcpClient client = new TcpClient();
         private IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000);
-        
+        private MainForm mainForm;
 
         public LoginForm()
         {
@@ -52,7 +52,9 @@ namespace BugTracker_v1._0.Forms
             responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
             if (responseData.Equals("hello"))
             {
-                
+                mainForm = new MainForm();
+                this.Hide();
+                mainForm.Show();
             }
         }
     }
