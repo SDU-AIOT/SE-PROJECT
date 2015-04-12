@@ -137,7 +137,7 @@ namespace BugTracker_v1._0__Server_
         {
             if (!checkIfExists(userInfo))
             {
-                string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+                string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     con.Open();
@@ -158,7 +158,7 @@ namespace BugTracker_v1._0__Server_
         {
             UserInfo userInfo = new UserInfo();
 
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
@@ -320,7 +320,7 @@ namespace BugTracker_v1._0__Server_
         /// <returns>Returns true if found, and false if not</returns>
         private bool checkLogin(UserInfo userInfo)
         {
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
@@ -342,7 +342,7 @@ namespace BugTracker_v1._0__Server_
         }
         private bool checkIfExists(UserInfo userInfo)
         {
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
