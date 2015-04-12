@@ -43,11 +43,21 @@ namespace BugTracker_v1._0__Server_
 
         private void bugTracker_UserListChanged(object sender, EventArgs e)
         {
+<<<<<<< ours
             if (connectedUsersListBox.SelectedIndex < 0) return;
             connectedUsersListBox.Items.Clear();
+=======
+            Program.InvokeIfRequired(connectedUsersListBox, () =>
+            {
+                connectedUsersListBox.Items.Clear();
+            });
+>>>>>>> theirs
             for (int i = 0; i < _bugTrackerService.UserList.Count; i++)
             {
-                connectedUsersListBox.Items.Add(_bugTrackerService.UserList[i].Username);
+                Program.InvokeIfRequired(connectedUsersListBox, () =>
+                {
+                    connectedUsersListBox.Items.Add(_bugTrackerService.UserList[i].Username);
+                });
             }
         }
 
