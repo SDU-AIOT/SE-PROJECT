@@ -26,11 +26,22 @@ namespace BugTracker_v1._0__Server_.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\Database\\BugTrackerD" +
-            "B.mdf;Integrated Security=True;Connect Timeout=30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\BugTrackerDB.mdf;Int" +
+            "egrated Security=True;Connect Timeout=30")]
         public string BugTrackerDBConnectionString {
             get {
                 return ((string)(this["BugTrackerDBConnectionString"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=(LocalDB)\\v11.0;AttachDbFilename=|DataDirectory|\\Database\\BugTrackerD" +
+            "B.mdf;Integrated Security=True;Connect Timeout=30")]
+        public string BugTrackerDBConnectionString1 {
+            get {
+                return ((string)(this["BugTrackerDBConnectionString1"]));
             }
         }
     }

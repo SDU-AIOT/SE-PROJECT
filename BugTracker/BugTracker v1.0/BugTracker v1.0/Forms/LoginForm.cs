@@ -1,6 +1,7 @@
 ﻿using BugTrackerCommonLib;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using Hik.Communication.ScsServices.Client;
+using Hik.Communication.ScsServices.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,8 +18,9 @@ namespace BugTracker_v1._0.Forms
 {
     public partial class LoginForm : Form
     {
-        private MainForm mainForm;
-
+        public IScsServiceClient<IBugTrackerService> client;
+        public UserInfo userInfo;
+        
         public LoginForm()
         {
             InitializeComponent();
@@ -31,15 +33,19 @@ namespace BugTracker_v1._0.Forms
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            var client = ScsServiceClientBuilder.CreateClient<IBugTrackerService>(new ScsTcpEndPoint("127.0.0.1", 10048));
+            client = ScsServiceClientBuilder.CreateClient<IBugTrackerService>(new ScsTcpEndPoint("127.0.0.1", 10048));
             client.Connect();
-            UserInfo userInfo = new UserInfo();
+            userInfo = new UserInfo();
             userInfo.Username = usernameField.Text;
             userInfo.Password = passwordField.Text;
             if (client.ServiceProxy.Login(userInfo))
             {
-                mainForm = new MainForm();
-                mainForm.Show();
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else 
+            {
+                MessageBox.Show("Wrong username or password");
             }
         }
 

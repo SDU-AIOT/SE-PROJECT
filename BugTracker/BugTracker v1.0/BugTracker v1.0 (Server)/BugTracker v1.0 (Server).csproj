@@ -47,8 +47,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BugTrackerCommonLib">
-      <HintPath>..\BugTrackerCommonLib\bin\Debug\BugTrackerCommonLib.dll</HintPath>
+    <Reference Include="BugTrackerCommonLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\BugTrackerCommonLib\bin\Release\BugTrackerCommonLib.dll</HintPath>
     </Reference>
     <Reference Include="Scs, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
