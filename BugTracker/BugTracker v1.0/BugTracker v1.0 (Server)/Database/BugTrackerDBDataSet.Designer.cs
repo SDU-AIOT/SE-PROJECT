@@ -10,7 +10,7 @@
 
 #pragma warning disable 1591
 
-namespace BugTracker_v1._0__Server_ {
+namespace BugTracker_v1._0__Server_.Database {
     
     
     /// <summary>
