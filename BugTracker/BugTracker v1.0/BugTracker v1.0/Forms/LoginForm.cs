@@ -41,6 +41,10 @@ namespace BugTracker_v1._0.Forms
                 mainForm = new MainForm();
                 mainForm.Show();
             }
+        }
+
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
 
         }
 

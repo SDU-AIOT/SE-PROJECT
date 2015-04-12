@@ -16,5 +16,23 @@ namespace BugTracker_v1._0.Forms
         {
             InitializeComponent();
         }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            LoginForm form = new LoginForm();
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                LoadPage();
+            } 
+            else
+            {
+                Environment.Exit(0);
+            }
+        }
+
+        private void LoadPage()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
