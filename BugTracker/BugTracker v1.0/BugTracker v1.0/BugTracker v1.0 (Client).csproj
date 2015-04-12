@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BugTrackerCommonLib">
-      <HintPath>..\BugTrackerCommonLib\bin\Release\BugTrackerCommonLib.dll</HintPath>
+      <HintPath>..\BugTrackerCommonLib\bin\Debug\BugTrackerCommonLib.dll</HintPath>
     </Reference>
     <Reference Include="Scs">
       <HintPath>..\..\..\Scs-Binaries\Scs.dll</HintPath>

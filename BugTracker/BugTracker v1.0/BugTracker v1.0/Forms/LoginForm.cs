@@ -34,8 +34,8 @@ namespace BugTracker_v1._0.Forms
             var client = ScsServiceClientBuilder.CreateClient<IBugTrackerService>(new ScsTcpEndPoint("127.0.0.1", 10048));
             client.Connect();
             UserInfo userInfo = new UserInfo();
-            userInfo.Username = "Isco";
-            userInfo.Password = "123";
+            userInfo.Username = usernameField.Text;
+            userInfo.Password = passwordField.Text;
             if (client.ServiceProxy.Login(userInfo))
             {
                 mainForm = new MainForm();

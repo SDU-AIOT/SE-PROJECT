@@ -12,6 +12,7 @@ using System.Threading;
 using Hik.Communication.ScsServices.Service;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using BugTrackerCommonLib;
+
 namespace BugTracker_v1._0__Server_
 {
     public partial class ServerForm : Form
@@ -42,6 +43,7 @@ namespace BugTracker_v1._0__Server_
 
         private void bugTracker_UserListChanged(object sender, EventArgs e)
         {
+            if (connectedUsersListBox.SelectedIndex < 0) return;
             connectedUsersListBox.Items.Clear();
             for (int i = 0; i < _bugTrackerService.UserList.Count; i++)
             {
