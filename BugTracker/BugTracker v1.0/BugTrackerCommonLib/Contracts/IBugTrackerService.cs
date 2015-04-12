@@ -27,6 +27,18 @@ namespace BugTrackerCommonLib
         void SendMessageToEverybody(BugTrackerMessage message);
 
         /// <summary>
+        /// Add user to Database.
+        /// </summary>
+        /// <param name="addUserToDatabase">Add User to Database</param>
+        bool AddUserToDatabase(UserInfo userInfo);
+
+        /// <summary>
+        /// Get User Information
+        /// </summary>
+        /// <param name="getUserInfo">User Information</param>
+        UserInfo getUserInfo(string username);
+        
+        /// <summary>
         /// Used to logout from BugTracker service.
         /// Client may not call this method while logging out (in an application crash situation),
         /// it will also be logged out automatically when connection fails between

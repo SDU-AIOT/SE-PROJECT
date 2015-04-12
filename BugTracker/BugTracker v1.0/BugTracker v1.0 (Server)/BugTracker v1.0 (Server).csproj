@@ -48,7 +48,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BugTrackerCommonLib">
-      <HintPath>..\BugTrackerCommonLib\bin\Debug\BugTrackerCommonLib.dll</HintPath>
+      <HintPath>..\BugTrackerCommonLib\bin\Release\BugTrackerCommonLib.dll</HintPath>
     </Reference>
     <Reference Include="Scs, Version=1.1.0.1, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -66,7 +66,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BugTrackerDBDataSet.Designer.cs">
+    <Compile Include="Database\BugTrackerDBDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>BugTrackerDBDataSet.xsd</DependentUpon>
@@ -92,15 +92,15 @@
     <EmbeddedResource Include="ServerForm.resx">
       <DependentUpon>ServerForm.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="BugTrackerDBDataSet.xsc">
+    <None Include="Database\BugTrackerDBDataSet.xsc">
       <DependentUpon>BugTrackerDBDataSet.xsd</DependentUpon>
     </None>
-    <None Include="BugTrackerDBDataSet.xsd">
+    <None Include="Database\BugTrackerDBDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>BugTrackerDBDataSet.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="BugTrackerDBDataSet.xss">
+    <None Include="Database\BugTrackerDBDataSet.xss">
       <DependentUpon>BugTrackerDBDataSet.xsd</DependentUpon>
     </None>
     <None Include="Properties\Settings.settings">
@@ -117,10 +117,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BugTrackerDB.mdf">
+    <Content Include="Database\BugTrackerDB.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="BugTrackerDB_log.ldf">
+    <Content Include="Database\BugTrackerDB_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>BugTrackerDB.mdf</DependentUpon>
     </Content>
