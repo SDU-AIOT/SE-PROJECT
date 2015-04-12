@@ -144,6 +144,7 @@ namespace BugTracker_v1._0__Server_
                     using (SqlCommand command = new SqlCommand(string.Format("INSERT INTO USERS (username,name,surname,rank,password) VALUES('{0}','{1}','{2}',{3},'{4}')", userInfo.Username, userInfo.Name, userInfo.Surname, userInfo.Rank, userInfo.Password), con))
                         command.ExecuteNonQuery();
                     con.Close();
+                    return true;
                 }
             }
             return false;
