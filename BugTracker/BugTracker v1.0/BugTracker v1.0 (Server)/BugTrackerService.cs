@@ -97,27 +97,6 @@ namespace BugTracker_v1._0__Server_
             }
             return false;
         }
-        private bool checkLogin(UserInfo userInfo)
-        {
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * FROM Users where username='"+userInfo.Username+"'",con))
-                using (SqlDataReader reader = command.ExecuteReader())
-                {
-                    while(reader.Read())
-                    {
-                        if (userInfo.Password.Equals(reader.GetString(reader.GetOrdinal("password"))))
-                        {
-                            return true;
-                        } 
-                    }
-                }
-                con.Close();
-            }
-            return false;
-        }
         /// <summary>
         /// Sends a public message to room.
         /// It will be seen all users in room.
@@ -148,6 +127,57 @@ namespace BugTracker_v1._0__Server_
                         }
                     }
                 });
+        }
+
+        /// <summary>
+        /// Add user to Database.
+        /// </summary>
+        /// <param name="userInfo">User Info</param>
+        public bool AddUserToDatabase(UserInfo userInfo)
+        {
+            if (!checkIfExists(userInfo))
+            {
+                string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+                using (SqlConnection con = new SqlConnection(connectionString))
+                {
+                    con.Open();
+                    using (SqlCommand command = new SqlCommand(string.Format("INSERT INTO USERS (username,name,surname,rank,password) VALUES('{0}','{1}','{2}',{3},'{4}')", userInfo.Username, userInfo.Name, userInfo.Surname, userInfo.Rank, userInfo.Password), con))
+                        command.ExecuteNonQuery();
+                    con.Close();
+                    return true;
+                }
+            }
+            return false;
+        }
+                    
+        /// <summary>
+        /// Get User Information
+        /// </summary>
+        /// <param name="getUserInfo">User Information</param>
+        public UserInfo getUserInfo(string username)
+        {
+            UserInfo userInfo = new UserInfo();
+
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand("SELECT * FROM Users where username='" + username + "'", con))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        userInfo.Id = reader.GetInt64(reader.GetOrdinal("id"));
+                        userInfo.Username = reader.GetString(reader.GetOrdinal("username"));
+                        userInfo.Name = reader.GetString(reader.GetOrdinal("name"));
+                        userInfo.Surname = reader.GetString(reader.GetOrdinal("surname"));
+                        userInfo.Rank = reader.GetInt32(reader.GetOrdinal("rank"));
+                        userInfo.Password = reader.GetString(reader.GetOrdinal("password"));
+                    }
+                }
+                con.Close();
+            }
+            return userInfo;
         }
 
         /// <summary>
@@ -283,7 +313,55 @@ namespace BugTracker_v1._0__Server_
                     where client.User.Username == username
                     select client).FirstOrDefault();
         }
-
+        /// <summary>
+        /// Check For User in Database
+        /// </summary>
+        /// <param name="checkLogin">Check Login</param>
+        /// <returns>Returns true if found, and false if not</returns>
+        private bool checkLogin(UserInfo userInfo)
+        {
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand("SELECT * FROM Users where username='" + userInfo.Username + "'", con))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if (userInfo.Password.Equals(reader.GetString(reader.GetOrdinal("password"))))
+                        {
+                            con.Close();
+                            return true;
+                        }
+                    }
+                }
+                con.Close();
+            }
+            return false;
+        }
+        private bool checkIfExists(UserInfo userInfo)
+        {
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\Database\BugTrackerDB.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand("SELECT COUNT(*) FROM Users where username='" + userInfo.Username + "'", con))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        if (reader.GetInt32(0) > 0)
+                        {
+                            con.Close();
+                            return true;
+                        }
+                    }
+                }
+                con.Close();
+            }
+            return false;
+        }
         #endregion
 
         #region Event raising methods
