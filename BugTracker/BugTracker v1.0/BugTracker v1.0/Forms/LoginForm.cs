@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BugTrackerCommonLib;
+using Hik.Communication.Scs.Communication.EndPoints.Tcp;
+using Hik.Communication.ScsServices.Client;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,14 +17,11 @@ namespace BugTracker_v1._0.Forms
 {
     public partial class LoginForm : Form
     {
-        private TcpClient client = new TcpClient();
-        private IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 3000);
         private MainForm mainForm;
 
         public LoginForm()
         {
             InitializeComponent();
-            client.Connect(serverEndPoint);
         }
 
         private void exitButton_Click(object sender, EventArgs e)
@@ -31,41 +31,18 @@ namespace BugTracker_v1._0.Forms
 
         private void loginButton_Click(object sender, EventArgs e)
         {
-            NetworkStream clientStream = client.GetStream();
-
-            ASCIIEncoding encoder = new ASCIIEncoding();
-            byte[] buffer = encoder.GetBytes("hello");
-
-            clientStream.Write(buffer, 0, buffer.Length);
-            clientStream.Flush();
-
-            // Receive the TcpServer.response.
-
-            // Buffer to store the response bytes.
-            Byte[] data = new Byte[256];
-
-            // String to store the response ASCII representation.
-            String responseData = String.Empty;
-
-            // Read the first batch of the TcpServer response bytes.
-            Int32 bytes = clientStream.Read(data, 0, data.Length);
-            responseData = System.Text.Encoding.ASCII.GetString(data, 0, bytes);
-            if (responseData.Equals("hello"))
+            var client = ScsServiceClientBuilder.CreateClient<IBugTrackerService>(new ScsTcpEndPoint("127.0.0.1", 10048));
+            client.Connect();
+            UserInfo userInfo = new UserInfo();
+            userInfo.Username = "Isco";
+            userInfo.Password = "123";
+            if (client.ServiceProxy.Login(userInfo))
             {
                 mainForm = new MainForm();
-                this.Hide();
                 mainForm.Show();
             }
-        }
-
-        private void exitButton_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void loginButton_Click(object sender, EventArgs e)
-        {
 
         }
+
     }
 }

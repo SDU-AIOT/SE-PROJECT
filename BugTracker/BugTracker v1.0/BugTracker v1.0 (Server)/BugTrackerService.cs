@@ -1,0 +1,322 @@
+﻿using BugTrackerCommonLib;
+using Hik.Collections;
+using Hik.Communication.ScsServices.Service;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BugTracker_v1._0__Server_
+{
+    class BugTrackerService : ScsService, IBugTrackerService
+    {
+        #region Events 
+
+        /// <summary>
+        /// This event is raised when online user list is changes.
+        /// It is usually raised when a new user log in or a user log out.
+        /// </summary
+        public event EventHandler UserListChanged;
+        
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets a list of online users.
+        /// </summary>
+        public List<UserInfo> UserList
+        {
+            get
+            {
+                return (from client in _clients.GetAllItems()
+                        select client.User).ToList();
+            }
+        }
+
+        #endregion
+
+        #region Private Fields
+
+        /// <summary>
+        /// List of all connected clients.
+        /// </summary>
+        private readonly ThreadSafeSortedList<long, BugTrackerClient> _clients;
+
+        #endregion
+
+        #region Constructor
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        public BugTrackerService()
+        {
+            _clients = new ThreadSafeSortedList<long, BugTrackerClient>();
+        }
+
+        #endregion
+
+        #region IBugTracker methods
+
+        /// <summary>
+        /// Used to login to BugTracker service.
+        /// </summary>
+        /// <param name="userInfo">User informations</param>
+        public bool Login(UserInfo userInfo)
+        {
+            //Check nick if it is being used by another user
+            if (FindClientByNick(userInfo.Username) != null)
+            {
+                throw new UsernameInUseException("The username '" + userInfo.Username + "' is being used by another user. Please select another one.");
+            }
+
+            //Get a reference to the current client that is calling this method
+            var client = CurrentClient;
+
+            //Get a proxy object to call methods of client when needed
+            var clientProxy = client.GetClientProxy<IBugTrackerClient>();
+
+            //Create a BugTrackerClient and store it in a collection
+            var bugTrackerClient = new BugTrackerClient(client, clientProxy, userInfo);
+            _clients[client.ClientId] = bugTrackerClient;
+
+            //Register to Disconnected event to know when user connection is closed
+            client.Disconnected += Client_Disconnected;
+
+            //Start a new task to send user list to new user and to inform
+            //all users that a new user joined to room
+            Task.Factory.StartNew(
+                () =>
+                {
+                    OnUserListChanged();
+                    SendUserListToClient(bugTrackerClient);
+                    SendUserLoginInfoToAllClients(userInfo);
+                });
+            return true;
+        }
+
+        /// <summary>
+        /// Sends a public message to room.
+        /// It will be seen all users in room.
+        /// </summary>
+        /// <param name="message">Message to be sent</param>
+        public void SendMessageToEverybody(BugTrackerMessage message)
+        {
+            //Get BugTrackerClient object
+            var senderClient = _clients[CurrentClient.ClientId];
+            if (senderClient == null)
+            {
+                throw new ApplicationException("Can not send message before login.");
+            }
+
+            //Send message to all online users
+            Task.Factory.StartNew(
+                () =>
+                {
+                    foreach (var bugTrackerClient in _clients.GetAllItems())
+                    {
+                        try
+                        {
+                            bugTrackerClient.ClientProxy.OnMessageToEverybody(senderClient.User.Username, message);
+                        }
+                        catch
+                        {
+
+                        }
+                    }
+                });
+        }
+
+        /// <summary>
+        /// Used to logout from BugTracker service.
+        /// Client may not call this method while logging out (in an application crash situation),
+        /// it will also be logged out automatically when connection fails between client and server.
+        /// </summary>
+        public void Logout()
+        {
+            ClientLogout(CurrentClient.ClientId);
+        }
+
+        #endregion
+
+        #region Private methods
+
+        /// <summary>
+        /// Handles Disconnected event of all clients.
+        /// </summary>
+        /// <param name="sender">Client object that is disconnected</param>
+        /// <param name="e">Event arguments (not used in this event)</param>
+        private void Client_Disconnected(object sender, EventArgs e)
+        {
+            //Get client object
+            var client = (IScsServiceClient)sender;
+
+            //Perform logout (so, if client did not call Logout method before close,
+            //we do logout automatically.
+            ClientLogout(client.ClientId);
+        }
+
+        /// <summary>
+        /// This method is used to send list of all online users to a new joined user.
+        /// </summary>
+        /// <param name="client">New user that is joined to service</param>
+        private void SendUserListToClient(BugTrackerClient client)
+        {
+            //Get all users except new user
+            var userList = UserList.Where((user) => (user.Username != client.User.Username)).ToArray();
+
+            //Do not send list if no user available (except the new user)
+            if (userList.Length <= 0)
+            {
+                return;
+            }
+
+            client.ClientProxy.GetUserList(userList);
+        }
+
+        /// <summary>
+        /// This method is called when a client Calls Logout method of service or a client
+        /// connection fails.
+        /// </summary>
+        /// <param name="clientId">Unique Id of client that is logged out</param>
+        private void ClientLogout(long clientId)
+        {
+            //Get client from client list, if not in list do not continue
+            var client = _clients[clientId];
+            if (client == null)
+            {
+                return;
+            }
+
+            //Remove client from online clients list
+            _clients.Remove(client.Client.ClientId);
+
+            //Unregister to Disconnected event (not needed really)
+            client.Client.Disconnected -= Client_Disconnected;
+
+            //Start a new task to inform all other users
+            Task.Factory.StartNew(
+                () =>
+                {
+                    OnUserListChanged();
+                    SendUserLogoutInfoToAllClients(client.User.Username);
+                });
+        }
+
+        /// <summary>
+        /// This method is used to inform all online clients
+        /// that a new user joined to room.
+        /// </summary>
+        /// <param name="userInfo">New joined user's informations</param>
+        private void SendUserLoginInfoToAllClients(UserInfo userInfo)
+        {
+            foreach (var client in _clients.GetAllItems())
+            {
+                //Do not send informations to user that is logged in.
+                if (client.User.Username == userInfo.Username)
+                {
+                    continue;
+                }
+
+                try
+                {
+                    client.ClientProxy.OnUserLogin(userInfo);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// This method is used to inform all online clients
+        /// that a user disconnected from BugTracker server.
+        /// </summary>
+        /// <param name="nick">Nick of disconnected user</param>
+        private void SendUserLogoutInfoToAllClients(string nick)
+        {
+            foreach (var client in _clients.GetAllItems())
+            {
+                try
+                {
+                    client.ClientProxy.OnUserLogout(nick);
+                }
+                catch
+                {
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// Finds BugTrackerClient ojbect by given nick.
+        /// </summary>
+        /// <param name="nick">Nick to search</param>
+        /// <returns>Found BugTrackerClient for that nick, or null if not found</returns>
+        private BugTrackerClient FindClientByNick(string username)
+        {
+            return (from client in _clients.GetAllItems()
+                    where client.User.Username == username
+                    select client).FirstOrDefault();
+        }
+
+        #endregion
+
+        #region Event raising methods
+
+        /// <summary>
+        /// Raises UserListChanged event.
+        /// </summary>
+        private void OnUserListChanged()
+        {
+            var handler = UserListChanged;
+            if (handler != null)
+            {
+                handler(this, EventArgs.Empty);
+            }
+        }
+
+        #endregion
+
+        #region Sub classes
+
+        /// <summary>
+        /// This class is used to store informations for a connected client.
+        /// </summary>
+        private sealed class BugTrackerClient
+        {
+            /// <summary>
+            /// Scs client reference.
+            /// </summary>
+            public IScsServiceClient Client { get; private set; }
+
+            /// <summary>
+            /// Proxy object to call remote methods of BugTracker client.
+            /// </summary>
+            public IBugTrackerClient ClientProxy { get; private set; }
+
+            /// <summary>
+            /// User informations of client.
+            /// </summary>
+            public UserInfo User { get; private set; }
+
+            /// <summary>
+            /// Creates a new BugTrackerClient object.
+            /// </summary>
+            /// <param name="client">Scs client reference</param>
+            /// <param name="clientProxy">Proxy object to call remote methods of BugTracker client</param>
+            /// <param name="userInfo">User informations of client</param>
+            public BugTrackerClient(IScsServiceClient client, IBugTrackerClient clientProxy, UserInfo userInfo)
+            {
+                Client = client;
+                ClientProxy = clientProxy;
+                User = userInfo;
+            }
+        }
+
+        #endregion
+    }
+}
