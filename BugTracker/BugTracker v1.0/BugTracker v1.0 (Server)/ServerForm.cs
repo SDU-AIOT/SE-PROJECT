@@ -12,6 +12,7 @@ using System.Threading;
 using Hik.Communication.ScsServices.Service;
 using Hik.Communication.Scs.Communication.EndPoints.Tcp;
 using BugTrackerCommonLib;
+
 namespace BugTracker_v1._0__Server_
 {
     public partial class ServerForm : Form

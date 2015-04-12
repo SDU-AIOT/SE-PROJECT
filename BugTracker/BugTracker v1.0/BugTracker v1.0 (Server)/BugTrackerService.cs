@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Data.SqlClient;
 namespace BugTracker_v1._0__Server_
 {
     class BugTrackerService : ScsService, IBugTrackerService
@@ -71,32 +71,53 @@ namespace BugTracker_v1._0__Server_
             {
                 throw new UsernameInUseException("The username '" + userInfo.Username + "' is being used by another user. Please select another one.");
             }
+            if (checkLogin(userInfo))
+            {
+                //Get a reference to the current client that is calling this method
+                var client = CurrentClient;
+                //Get a proxy object to call methods of client when needed
+                var clientProxy = client.GetClientProxy<IBugTrackerClient>();
 
-            //Get a reference to the current client that is calling this method
-            var client = CurrentClient;
+                //Create a BugTrackerClient and store it in a collection
+                var bugTrackerClient = new BugTrackerClient(client, clientProxy, userInfo);
+                _clients[client.ClientId] = bugTrackerClient;
 
-            //Get a proxy object to call methods of client when needed
-            var clientProxy = client.GetClientProxy<IBugTrackerClient>();
-
-            //Create a BugTrackerClient and store it in a collection
-            var bugTrackerClient = new BugTrackerClient(client, clientProxy, userInfo);
-            _clients[client.ClientId] = bugTrackerClient;
-
-            //Register to Disconnected event to know when user connection is closed
-            client.Disconnected += Client_Disconnected;
-
-            //Start a new task to send user list to new user and to inform
-            //all users that a new user joined to room
-            Task.Factory.StartNew(
+                //Register to Disconnected event to know when user connection is closed
+                client.Disconnected += Client_Disconnected;
+                //Start a new task to send user list to new user and to inform
+                //all users that a new user joined to room
+                Task.Factory.StartNew(
                 () =>
                 {
                     OnUserListChanged();
                     SendUserListToClient(bugTrackerClient);
                     SendUserLoginInfoToAllClients(userInfo);
                 });
-            return true;
+                return true;
+            }
+            return false;
         }
-
+        private bool checkLogin(UserInfo userInfo)
+        {
+            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand("SELECT * FROM Users where username='"+userInfo.Username+"'",con))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while(reader.Read())
+                    {
+                        if (userInfo.Password.Equals(reader.GetString(reader.GetOrdinal("password"))))
+                        {
+                            return true;
+                        } 
+                    }
+                }
+                con.Close();
+            }
+            return false;
+        }
         /// <summary>
         /// Sends a public message to room.
         /// It will be seen all users in room.
