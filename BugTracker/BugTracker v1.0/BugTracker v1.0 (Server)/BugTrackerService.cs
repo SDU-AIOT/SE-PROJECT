@@ -212,7 +212,7 @@ namespace BugTracker_v1._0__Server_
         /// <summary>
         /// Add Project to Database.
         /// </summary>
-        public void AddProjectToDatabase(ProjectInfo projectInfo)
+        public void AddProjectToDatabase(ProjectInfo projectInfo, List<long> memberIds)
         {
             using (SqlConnection con = new SqlConnection(connectionString))
             {
@@ -220,6 +220,14 @@ namespace BugTracker_v1._0__Server_
                 using (SqlCommand command = new SqlCommand(string.Format("INSERT INTO Projects (name,description) VALUES('{0}','{1}')", projectInfo.Name, projectInfo.Description), con))
                 {
                     command.ExecuteNonQuery();
+                }
+                if (memberIds != null)
+                {
+                    using (SqlCommand command = new SqlCommand("SELECT max(id) FROM Projects", con))
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        AddMembersToProject(reader.GetInt64(0), memberIds);
+                    }
                 }
                 con.Close();
             }
