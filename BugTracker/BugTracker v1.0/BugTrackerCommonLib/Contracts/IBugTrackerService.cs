@@ -47,7 +47,7 @@ namespace BugTrackerCommonLib
         /// <summary>
         /// Add Project to Database.
         /// </summary>
-        void AddProjectToDatabase(ProjectInfo projectInfo);
+        void AddProjectToDatabase(ProjectInfo projectInfo, List<long> memberIds);
 
         /// <summary>
         /// Get List of Projects.
