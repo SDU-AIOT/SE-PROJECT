@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arguments\BugTrackerMessage.cs" />
+    <Compile Include="Arguments\ProjectInfo.cs" />
     <Compile Include="Contracts\IBugTrackerClient.cs" />
     <Compile Include="Contracts\IBugTrackerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

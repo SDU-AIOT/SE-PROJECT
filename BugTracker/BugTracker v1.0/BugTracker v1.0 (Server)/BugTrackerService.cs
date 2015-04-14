@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
+using BugTrackerCommonLib.Arguments;
 namespace BugTracker_v1._0__Server_
 {
     class BugTrackerService : ScsService, IBugTrackerService
@@ -43,7 +44,8 @@ namespace BugTracker_v1._0__Server_
         /// List of all connected clients.
         /// </summary>
         private readonly ThreadSafeSortedList<long, BugTrackerClient> _clients;
-
+        string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=\\psf\Home\Documents\Visual Studio 2013\Projects\SE-PROJECT\BugTracker\BugTracker v1.0\BugTracker v1.0 (Server)\BugTrackerDB.mdf;Integrated Security=True";
+          
         #endregion
 
         #region Constructor
@@ -135,14 +137,15 @@ namespace BugTracker_v1._0__Server_
         /// <param name="userInfo">User Info</param>
         public bool AddUserToDatabase(UserInfo userInfo)
         {
-            if (!checkIfExists(userInfo))
+            if (!checkIfUsernameExists(userInfo))
             {
-                string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
                 using (SqlConnection con = new SqlConnection(connectionString))
                 {
                     con.Open();
                     using (SqlCommand command = new SqlCommand(string.Format("INSERT INTO USERS (username,name,surname,rank,password) VALUES('{0}','{1}','{2}',{3},'{4}')", userInfo.Username, userInfo.Name, userInfo.Surname, userInfo.Rank, userInfo.Password), con))
+                    {
                         command.ExecuteNonQuery();
+                    }
                     con.Close();
                     return true;
                 }
@@ -154,11 +157,10 @@ namespace BugTracker_v1._0__Server_
         /// Get User Information
         /// </summary>
         /// <param name="getUserInfo">User Information</param>
-        public UserInfo getUserInfo(string username)
+        public UserInfo GetUserInfo(string username)
         {
             UserInfo userInfo = new UserInfo();
 
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
@@ -179,7 +181,94 @@ namespace BugTracker_v1._0__Server_
             }
             return userInfo;
         }
-
+        /// <summary>
+        /// Get Users List
+        /// </summary>      
+        public List<UserInfo> GetUsersList()
+        {
+            List<UserInfo> usersList = new List<UserInfo>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand("SELECT * FROM Users", con))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        UserInfo userInfo = new UserInfo();
+                        userInfo.Id = reader.GetInt64(reader.GetOrdinal("id"));
+                        userInfo.Username = reader.GetString(reader.GetOrdinal("username"));
+                        userInfo.Name = reader.GetString(reader.GetOrdinal("name"));
+                        userInfo.Surname = reader.GetString(reader.GetOrdinal("surname"));
+                        userInfo.Rank = reader.GetInt32(reader.GetOrdinal("rank"));
+                        userInfo.Password = reader.GetString(reader.GetOrdinal("password"));
+                        usersList.Add(userInfo);
+                    }
+                }
+                con.Close();
+            }
+            return usersList;
+        }
+        /// <summary>
+        /// Add Project to Database.
+        /// </summary>
+        public void AddProjectToDatabase(ProjectInfo projectInfo)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand(string.Format("INSERT INTO Projects (name,description) VALUES('{0}','{1}')", projectInfo.Name, projectInfo.Description), con))
+                {
+                    command.ExecuteNonQuery();
+                }
+                con.Close();
+            }
+        }
+        /// <summary>
+        /// Get List of Projects.
+        /// </summary>
+        public List<ProjectInfo> GetProjectList()
+        {
+            List<ProjectInfo> projectList = new List<ProjectInfo>();
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                using (SqlCommand command = new SqlCommand("SELECT * FROM Projects", con))
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        ProjectInfo projectInfo = new ProjectInfo();
+                        projectInfo.Id = reader.GetInt64(reader.GetOrdinal("id"));
+                        projectInfo.Name = reader.GetString(reader.GetOrdinal("name"));
+                        projectInfo.Description = reader.GetString(reader.GetOrdinal("description"));
+                        projectList.Add(projectInfo);
+                }
+                    }
+                con.Close();
+            }
+            return projectList;
+        }
+        /// <summary>
+        /// Add members to Project Members.
+        /// </summary>
+        /// <param name="id">Project Id</param>
+        /// <param name="memberIds">Member Ids</param>
+        public void AddMembersToProject(long projectId, List<long> memberIds)
+        {
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                con.Open();
+                for (int i = 0; i < memberIds.Count(); i++)
+                {
+                    using (SqlCommand command = new SqlCommand(string.Format("INSERT INTO Project_members (user_id,project_id) VALUES({0},{1})", memberIds.ElementAt(i), projectId), con))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+                con.Close();
+            }
+        }
         /// <summary>
         /// Used to logout from BugTracker service.
         /// Client may not call this method while logging out (in an application crash situation),
@@ -320,7 +409,6 @@ namespace BugTracker_v1._0__Server_
         /// <returns>Returns true if found, and false if not</returns>
         private bool checkLogin(UserInfo userInfo)
         {
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
@@ -340,9 +428,8 @@ namespace BugTracker_v1._0__Server_
             }
             return false;
         }
-        private bool checkIfExists(UserInfo userInfo)
+        private bool checkIfUsernameExists(UserInfo userInfo)
         {
-            string connectionString = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=|DataDirectory|\BugTrackerDB.mdf;Integrated Security=True";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 con.Open();
@@ -362,6 +449,7 @@ namespace BugTracker_v1._0__Server_
             }
             return false;
         }
+
         #endregion
 
         #region Event raising methods
