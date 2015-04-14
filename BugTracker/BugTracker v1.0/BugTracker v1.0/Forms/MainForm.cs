@@ -51,5 +51,15 @@ namespace BugTracker_v1._0.Forms
                 MessageBox.Show("Successfull :)");
             }
         }
+
+        private void addProject_Click(object sender, EventArgs e)
+        {
+            EditProjectForm form = new EditProjectForm();
+            form.client = client;
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                MessageBox.Show("Successfull :)");
+            }
+        }
     }
 }

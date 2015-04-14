@@ -32,6 +32,7 @@
             this.nameLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.addUser = new System.Windows.Forms.Button();
+            this.addProject = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.thumbBox)).BeginInit();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -57,6 +58,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.addProject);
             this.panel1.Controls.Add(this.addUser);
             this.panel1.Location = new System.Drawing.Point(675, 84);
             this.panel1.Name = "panel1";
@@ -65,13 +67,23 @@
             // 
             // addUser
             // 
-            this.addUser.Location = new System.Drawing.Point(36, 16);
+            this.addUser.Location = new System.Drawing.Point(26, 17);
             this.addUser.Name = "addUser";
-            this.addUser.Size = new System.Drawing.Size(75, 23);
+            this.addUser.Size = new System.Drawing.Size(95, 23);
             this.addUser.TabIndex = 0;
             this.addUser.Text = "New user...";
             this.addUser.UseVisualStyleBackColor = true;
             this.addUser.Click += new System.EventHandler(this.addUser_Click);
+            // 
+            // addProject
+            // 
+            this.addProject.Location = new System.Drawing.Point(26, 46);
+            this.addProject.Name = "addProject";
+            this.addProject.Size = new System.Drawing.Size(95, 23);
+            this.addProject.TabIndex = 1;
+            this.addProject.Text = "New project...";
+            this.addProject.UseVisualStyleBackColor = true;
+            this.addProject.Click += new System.EventHandler(this.addProject_Click);
             // 
             // MainForm
             // 
@@ -97,5 +109,6 @@
         private System.Windows.Forms.Label nameLabel;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button addUser;
+        private System.Windows.Forms.Button addProject;
     }
 }
