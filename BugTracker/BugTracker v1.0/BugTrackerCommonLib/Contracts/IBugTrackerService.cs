@@ -1,4 +1,5 @@
-﻿using Hik.Communication.ScsServices.Service;
+﻿using BugTrackerCommonLib.Arguments;
+using Hik.Communication.ScsServices.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,9 +36,31 @@ namespace BugTrackerCommonLib
         /// <summary>
         /// Get User Information
         /// </summary>
-        /// <param name="getUserInfo">User Information</param>
-        UserInfo getUserInfo(string username);
-        
+        /// <param name="username">User's username</param>
+        UserInfo GetUserInfo(string username);
+
+        /// <summary>
+        /// Get Users List
+        /// </summary>      
+        List<UserInfo> GetUsersList();
+
+        /// <summary>
+        /// Add Project to Database.
+        /// </summary>
+        void AddProjectToDatabase(ProjectInfo projectInfo);
+
+        /// <summary>
+        /// Get List of Projects.
+        /// </summary>
+        List<ProjectInfo> GetProjectList();
+
+        /// <summary>
+        /// Add members to Project Members.
+        /// </summary>
+        /// <param name="id">Project Id</param>
+        /// <param name="memberIds">Member Ids</param>
+        void AddMembersToProject(long projectId, List<long> memberIds);
+
         /// <summary>
         /// Used to logout from BugTracker service.
         /// Client may not call this method while logging out (in an application crash situation),
