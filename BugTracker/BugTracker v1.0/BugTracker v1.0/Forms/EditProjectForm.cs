@@ -1,4 +1,5 @@
 ﻿using BugTrackerCommonLib;
+using BugTrackerCommonLib.Arguments;
 using Hik.Communication.ScsServices.Client;
 using System;
 using System.Collections.Generic;
@@ -37,8 +38,8 @@ namespace BugTracker_v1._0.Forms
 
         private void createButton_Click(object sender, EventArgs e)
         {
-            if (projectName.Text.Length == 0 || projectDescription.Text.Length == 0 
-                || assigneesCheckListBox.CheckedItems.Count == 0)
+            if (projectName.Text.Length > 0 && projectDescription.Text.Length > 0 
+                && assigneesCheckListBox.CheckedItems.Count > 0)
             {
                 List<long> memberIds = new List<long>();
                 foreach (CheckItem item in assigneesCheckListBox.CheckedItems)
@@ -50,6 +51,7 @@ namespace BugTracker_v1._0.Forms
                 projectInfo.Description = projectDescription.Text;
                 client.ServiceProxy.AddProjectToDatabase(projectInfo, memberIds);
                 this.DialogResult = DialogResult.OK;
+                this.Close();
             }
         }
 
