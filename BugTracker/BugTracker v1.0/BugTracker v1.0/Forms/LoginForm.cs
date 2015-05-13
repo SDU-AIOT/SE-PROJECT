@@ -54,5 +54,10 @@ namespace BugTracker_v1._0.Forms
 
         }
 
+        private void passwordField_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

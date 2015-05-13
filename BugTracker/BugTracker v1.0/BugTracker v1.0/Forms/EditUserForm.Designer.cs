@@ -167,6 +167,7 @@
             this.Controls.Add(this.label1);
             this.Name = "EditUserForm";
             this.Text = "EditUserForm";
+            this.Load += new System.EventHandler(this.EditUserForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

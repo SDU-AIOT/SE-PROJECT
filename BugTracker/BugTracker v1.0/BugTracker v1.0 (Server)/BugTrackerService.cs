@@ -169,7 +169,7 @@ namespace BugTracker_v1._0__Server_
                 {
                     while (reader.Read())
                     {
-                        userInfo.Id = reader.GetInt64(reader.GetOrdinal("id"));
+                        userInfo.Id = reader.GetInt32(reader.GetOrdinal("id"));
                         userInfo.Username = reader.GetString(reader.GetOrdinal("username"));
                         userInfo.Name = reader.GetString(reader.GetOrdinal("name"));
                         userInfo.Surname = reader.GetString(reader.GetOrdinal("surname"));
@@ -196,7 +196,7 @@ namespace BugTracker_v1._0__Server_
                     while (reader.Read())
                     {
                         UserInfo userInfo = new UserInfo();
-                        userInfo.Id = reader.GetInt64(reader.GetOrdinal("id"));
+                        userInfo.Id = reader.GetInt32(reader.GetOrdinal("id"));
                         userInfo.Username = reader.GetString(reader.GetOrdinal("username"));
                         userInfo.Name = reader.GetString(reader.GetOrdinal("name"));
                         userInfo.Surname = reader.GetString(reader.GetOrdinal("surname"));
@@ -226,7 +226,7 @@ namespace BugTracker_v1._0__Server_
                     using (SqlCommand command = new SqlCommand("SELECT max(id) FROM Projects", con))
                     using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        AddMembersToProject(reader.GetInt64(0), memberIds);
+                        AddMembersToProject(reader.GetInt32(0), memberIds);
                     }
                 }
                 con.Close();
@@ -247,7 +247,7 @@ namespace BugTracker_v1._0__Server_
                     while (reader.Read())
                     {
                         ProjectInfo projectInfo = new ProjectInfo();
-                        projectInfo.Id = reader.GetInt64(reader.GetOrdinal("id"));
+                        projectInfo.Id = reader.GetInt32(reader.GetOrdinal("id"));
                         projectInfo.Name = reader.GetString(reader.GetOrdinal("name"));
                         projectInfo.Description = reader.GetString(reader.GetOrdinal("description"));
                         projectList.Add(projectInfo);
