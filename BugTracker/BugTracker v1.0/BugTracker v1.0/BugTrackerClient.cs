@@ -4,17 +4,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BugTracker_v1._0.Forms;
 
 namespace BugTracker_v1._0
 {
     class BugTrackerClient : IBugTrackerClient
     {
+        private  MainForm _mainForm;
         /// <summary>
         /// Creates a new BugTrackerClient.
         /// </summary>
-        public BugTrackerClient() 
+        public BugTrackerClient(MainForm mainForm) 
         {
-
+            _mainForm = mainForm;
         }
 
         public void GetUserList(UserInfo[] users)
@@ -33,7 +35,7 @@ namespace BugTracker_v1._0
         /// <param name="message">Message text</param>
         public void OnMessageToEverybody(string username, BugTrackerMessage message)
         {
-
+            _mainForm.OnMessageReceived(BugTrackerMessage message);
         }
 
         public void OnUserLogin(UserInfo userInfo)

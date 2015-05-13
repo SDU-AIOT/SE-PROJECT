@@ -39,7 +39,7 @@ namespace BugTracker_v1._0.Forms
         private void createButton_Click(object sender, EventArgs e)
         {
             if (projectName.Text.Length > 0 && projectDescription.Text.Length > 0 
-                && assigneesCheckListBox.CheckedItems.Count > 0)
+                && assigneesCheckListBox.CheckedItems.Count > 0)    
             {
                 List<long> memberIds = new List<long>();
                 foreach (CheckItem item in assigneesCheckListBox.CheckedItems)

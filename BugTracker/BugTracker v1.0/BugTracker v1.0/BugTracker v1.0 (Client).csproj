@@ -53,6 +53,15 @@
   <ItemGroup>
     <Compile Include="BugController.cs" />
     <Compile Include="BugTrackerClient.cs" />
+    <Compile Include="BugTrackerDBDataSet.cs">
+      <DependentUpon>BugTrackerDBDataSet.xsd</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="BugTrackerDBDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BugTrackerDBDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Forms\EditProjectForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +116,17 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="BugTrackerDBDataSet.xsc">
+      <DependentUpon>BugTrackerDBDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="BugTrackerDBDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>BugTrackerDBDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="BugTrackerDBDataSet.xss">
+      <DependentUpon>BugTrackerDBDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
