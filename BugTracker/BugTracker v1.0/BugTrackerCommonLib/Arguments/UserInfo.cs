@@ -86,6 +86,29 @@ namespace BugTrackerCommonLib
             }
         }
         /// <summary>
+        /// Rank of the user.
+        /// </summary>
+        public string RankName
+        {
+            get
+            {
+                switch (rank)
+                {
+                    case 1:
+                        return "Administrator";
+                    case 2:
+                        return "Project Manager";
+                    case 3:
+                        return "Developer";
+                    case 4:
+                        return "Tester";
+                    default:
+                        return "";
+                }
+            }
+            set { }
+        }
+        /// <summary>
         /// ID of the user;
         /// </summary>
         public long Id

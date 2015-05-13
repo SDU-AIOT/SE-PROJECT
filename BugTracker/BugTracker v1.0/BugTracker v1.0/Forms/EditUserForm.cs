@@ -49,5 +49,10 @@ namespace BugTracker_v1._0.Forms
                 MessageBox.Show("The username already exists");
             }
         }
+
+        private void EditUserForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

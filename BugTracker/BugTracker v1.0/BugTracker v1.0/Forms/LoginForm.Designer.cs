@@ -52,6 +52,7 @@
             this.passwordField.Name = "passwordField";
             this.passwordField.Size = new System.Drawing.Size(191, 20);
             this.passwordField.TabIndex = 1;
+            this.passwordField.TextChanged += new System.EventHandler(this.passwordField_TextChanged);
             // 
             // label1
             // 
