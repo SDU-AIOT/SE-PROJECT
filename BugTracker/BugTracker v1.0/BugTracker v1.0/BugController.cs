@@ -24,6 +24,10 @@ namespace BugTracker_v1._0
         /// </summary>
         private IScsServiceClient<IBugTrackerService> _scsClient;
 
+        /// <summary>
+        /// Reference to main window.
+        /// </summary>
+        public IBugProcessView BugProcess { get; set; }
 
         #region IChatController implementation
 
@@ -37,7 +41,7 @@ namespace BugTracker_v1._0
             Disconnect();
 
             //Create a ChatClient to handle remote method invocations by server
-            _bugTrackerClient = new BugTrackerClient();
+            _bugTrackerClient = new BugTrackerClient(BugProcess);
 
             //Create a SCS client to connect to SCS server
             _scsClient = ScsServiceClientBuilder.CreateClient<IBugTrackerService>(new ScsTcpEndPoint("localhost", 10048), _bugTrackerClient);

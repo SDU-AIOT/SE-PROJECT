@@ -20,6 +20,7 @@ namespace BugTracker_v1._0.Forms
     {
         public IScsServiceClient<IBugTrackerService> client;
         public UserInfo userInfo;
+        public MainForm _mainForm;
         
         public LoginForm()
         {

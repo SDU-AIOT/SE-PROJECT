@@ -358,20 +358,38 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
               <Mapping SourceColumn="password" DataSetColumn="password" />
             </Mappings>
             <Sources>
-              <DbSource ConnectionRef="BugTrackerDBConnectionString (Settings)" DbObjectName="dbo.Users" DbObjectType="Table" FillMethodModifier="Public" FillMethodName="FillWithRankNameBy" GenerateMethods="Fill" GenerateShortCommands="true" GeneratorSourceName="FillWithRankNameBy" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="FillWithRankNameBy">
+              <DbSource ConnectionRef="BugTrackerDBConnectionString (Settings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="FillWithRankNameBy" GenerateMethods="Fill" GenerateShortCommands="true" GeneratorSourceName="FillWithRankNameBy" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetDataBy" UserSourceName="FillWithRankNameBy">
                 <SelectCommand>
                   <DbCommand CommandType="Text" ModifiedByUser="true">
-                    <CommandText>SELECT id, username, name, surname, CASE 
-            WHEN rank = 1  
-               THEN 'Admin' 
-            WHEN rank = 2
-               THEN 'Project Manager'
-       END as Salable, password FROM dbo.Users</CommandText>
+                    <CommandText>SELECT        Users.id, Users.username AS Username, Users.name AS Name, Users.surname AS Surname, Users.password, Ranks.rank AS Position
+FROM            Users INNER JOIN
+                         Ranks ON Users.rank = Ranks.id</CommandText>
                     <Parameters />
                   </DbCommand>
                 </SelectCommand>
               </DbSource>
             </Sources>
+          </TableAdapter>
+          <TableAdapter BaseClass="System.ComponentModel.Component" DataAccessorModifier="AutoLayout, AnsiClass, Class, Public" DataAccessorName="Issue_with_projectNameTableAdapter" GeneratorDataComponentClassName="Issue_with_projectNameTableAdapter" Name="Issue_with_projectName" UserDataComponentName="Issue_with_projectNameTableAdapter">
+            <MainSource>
+              <DbSource ConnectionRef="BugTrackerDBConnectionString (Settings)" DbObjectType="Unknown" FillMethodModifier="Public" FillMethodName="Fill" GenerateMethods="Both" GenerateShortCommands="false" GeneratorGetMethodName="GetData" GeneratorSourceName="Fill" GetMethodModifier="Public" GetMethodName="GetData" QueryType="Rowset" ScalarCallRetval="System.Object, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" UseOptimisticConcurrency="true" UserGetMethodName="GetData" UserSourceName="Fill">
+                <SelectCommand>
+                  <DbCommand CommandType="Text" ModifiedByUser="true">
+                    <CommandText>SELECT        Issues.id, Issues.name AS Name, Issues.due_date AS [Due date], Projects.name AS Project
+FROM            Issues INNER JOIN
+                         Projects ON Issues.project_id = Projects.id</CommandText>
+                    <Parameters />
+                  </DbCommand>
+                </SelectCommand>
+              </DbSource>
+            </MainSource>
+            <Mappings>
+              <Mapping SourceColumn="id" DataSetColumn="id" />
+              <Mapping SourceColumn="Name" DataSetColumn="Name" />
+              <Mapping SourceColumn="Due date" DataSetColumn="Due date" />
+              <Mapping SourceColumn="Project" DataSetColumn="Project" />
+            </Mappings>
+            <Sources />
           </TableAdapter>
         </Tables>
         <Sources />
@@ -381,7 +399,7 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
   <xs:element name="BugTrackerDBDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="BugTrackerDBDataSet" msprop:Generator_UserDSName="BugTrackerDBDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Comments" msprop:Generator_TableClassName="CommentsDataTable" msprop:Generator_TableVarName="tableComments" msprop:Generator_RowChangedName="CommentsRowChanged" msprop:Generator_TablePropName="Comments" msprop:Generator_RowDeletingName="CommentsRowDeleting" msprop:Generator_RowChangingName="CommentsRowChanging" msprop:Generator_RowEvHandlerName="CommentsRowChangeEventHandler" msprop:Generator_RowDeletedName="CommentsRowDeleted" msprop:Generator_RowClassName="CommentsRow" msprop:Generator_UserTableName="Comments" msprop:Generator_RowEvArgName="CommentsRowChangeEvent">
+        <xs:element name="Comments" msprop:Generator_TableClassName="CommentsDataTable" msprop:Generator_TableVarName="tableComments" msprop:Generator_TablePropName="Comments" msprop:Generator_RowDeletingName="CommentsRowDeleting" msprop:Generator_RowChangingName="CommentsRowChanging" msprop:Generator_RowEvHandlerName="CommentsRowChangeEventHandler" msprop:Generator_RowDeletedName="CommentsRowDeleted" msprop:Generator_UserTableName="Comments" msprop:Generator_RowChangedName="CommentsRowChanged" msprop:Generator_RowEvArgName="CommentsRowChangeEvent" msprop:Generator_RowClassName="CommentsRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:int" />
@@ -397,7 +415,7 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Issue_types" msprop:Generator_TableClassName="Issue_typesDataTable" msprop:Generator_TableVarName="tableIssue_types" msprop:Generator_RowChangedName="Issue_typesRowChanged" msprop:Generator_TablePropName="Issue_types" msprop:Generator_RowDeletingName="Issue_typesRowDeleting" msprop:Generator_RowChangingName="Issue_typesRowChanging" msprop:Generator_RowEvHandlerName="Issue_typesRowChangeEventHandler" msprop:Generator_RowDeletedName="Issue_typesRowDeleted" msprop:Generator_RowClassName="Issue_typesRow" msprop:Generator_UserTableName="Issue_types" msprop:Generator_RowEvArgName="Issue_typesRowChangeEvent">
+        <xs:element name="Issue_types" msprop:Generator_TableClassName="Issue_typesDataTable" msprop:Generator_TableVarName="tableIssue_types" msprop:Generator_TablePropName="Issue_types" msprop:Generator_RowDeletingName="Issue_typesRowDeleting" msprop:Generator_RowChangingName="Issue_typesRowChanging" msprop:Generator_RowEvHandlerName="Issue_typesRowChangeEventHandler" msprop:Generator_RowDeletedName="Issue_typesRowDeleted" msprop:Generator_UserTableName="Issue_types" msprop:Generator_RowChangedName="Issue_typesRowChanged" msprop:Generator_RowEvArgName="Issue_typesRowChangeEvent" msprop:Generator_RowClassName="Issue_typesRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:int" />
@@ -418,7 +436,7 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Issues" msprop:Generator_TableClassName="IssuesDataTable" msprop:Generator_TableVarName="tableIssues" msprop:Generator_RowChangedName="IssuesRowChanged" msprop:Generator_TablePropName="Issues" msprop:Generator_RowDeletingName="IssuesRowDeleting" msprop:Generator_RowChangingName="IssuesRowChanging" msprop:Generator_RowEvHandlerName="IssuesRowChangeEventHandler" msprop:Generator_RowDeletedName="IssuesRowDeleted" msprop:Generator_RowClassName="IssuesRow" msprop:Generator_UserTableName="Issues" msprop:Generator_RowEvArgName="IssuesRowChangeEvent">
+        <xs:element name="Issues" msprop:Generator_TableClassName="IssuesDataTable" msprop:Generator_TableVarName="tableIssues" msprop:Generator_TablePropName="Issues" msprop:Generator_RowDeletingName="IssuesRowDeleting" msprop:Generator_RowChangingName="IssuesRowChanging" msprop:Generator_RowEvHandlerName="IssuesRowChangeEventHandler" msprop:Generator_RowDeletedName="IssuesRowDeleted" msprop:Generator_UserTableName="Issues" msprop:Generator_RowChangedName="IssuesRowChanged" msprop:Generator_RowEvArgName="IssuesRowChangeEvent" msprop:Generator_RowClassName="IssuesRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:int" />
@@ -443,7 +461,7 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Project_members" msprop:Generator_TableClassName="Project_membersDataTable" msprop:Generator_TableVarName="tableProject_members" msprop:Generator_RowChangedName="Project_membersRowChanged" msprop:Generator_TablePropName="Project_members" msprop:Generator_RowDeletingName="Project_membersRowDeleting" msprop:Generator_RowChangingName="Project_membersRowChanging" msprop:Generator_RowEvHandlerName="Project_membersRowChangeEventHandler" msprop:Generator_RowDeletedName="Project_membersRowDeleted" msprop:Generator_RowClassName="Project_membersRow" msprop:Generator_UserTableName="Project_members" msprop:Generator_RowEvArgName="Project_membersRowChangeEvent">
+        <xs:element name="Project_members" msprop:Generator_TableClassName="Project_membersDataTable" msprop:Generator_TableVarName="tableProject_members" msprop:Generator_TablePropName="Project_members" msprop:Generator_RowDeletingName="Project_membersRowDeleting" msprop:Generator_RowChangingName="Project_membersRowChanging" msprop:Generator_RowEvHandlerName="Project_membersRowChangeEventHandler" msprop:Generator_RowDeletedName="Project_membersRowDeleted" msprop:Generator_UserTableName="Project_members" msprop:Generator_RowChangedName="Project_membersRowChanged" msprop:Generator_RowEvArgName="Project_membersRowChangeEvent" msprop:Generator_RowClassName="Project_membersRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:int" />
@@ -452,7 +470,7 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Projects" msprop:Generator_TableClassName="ProjectsDataTable" msprop:Generator_TableVarName="tableProjects" msprop:Generator_RowChangedName="ProjectsRowChanged" msprop:Generator_TablePropName="Projects" msprop:Generator_RowDeletingName="ProjectsRowDeleting" msprop:Generator_RowChangingName="ProjectsRowChanging" msprop:Generator_RowEvHandlerName="ProjectsRowChangeEventHandler" msprop:Generator_RowDeletedName="ProjectsRowDeleted" msprop:Generator_RowClassName="ProjectsRow" msprop:Generator_UserTableName="Projects" msprop:Generator_RowEvArgName="ProjectsRowChangeEvent">
+        <xs:element name="Projects" msprop:Generator_TableClassName="ProjectsDataTable" msprop:Generator_TableVarName="tableProjects" msprop:Generator_TablePropName="Projects" msprop:Generator_RowDeletingName="ProjectsRowDeleting" msprop:Generator_RowChangingName="ProjectsRowChanging" msprop:Generator_RowEvHandlerName="ProjectsRowChangeEventHandler" msprop:Generator_RowDeletedName="ProjectsRowDeleted" msprop:Generator_UserTableName="Projects" msprop:Generator_RowChangedName="ProjectsRowChanged" msprop:Generator_RowEvArgName="ProjectsRowChangeEvent" msprop:Generator_RowClassName="ProjectsRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:int" />
@@ -473,7 +491,7 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Users" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_TableVarName="tableUsers" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_TablePropName="Users" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_RowClassName="UsersRow" msprop:Generator_UserTableName="Users" msprop:Generator_RowEvArgName="UsersRowChangeEvent">
+        <xs:element name="Users" msprop:Generator_TableClassName="UsersDataTable" msprop:Generator_TableVarName="tableUsers" msprop:Generator_TablePropName="Users" msprop:Generator_RowDeletingName="UsersRowDeleting" msprop:Generator_RowChangingName="UsersRowChanging" msprop:Generator_RowEvHandlerName="UsersRowChangeEventHandler" msprop:Generator_RowDeletedName="UsersRowDeleted" msprop:Generator_UserTableName="Users" msprop:Generator_RowChangedName="UsersRowChanged" msprop:Generator_RowEvArgName="UsersRowChangeEvent" msprop:Generator_RowClassName="UsersRow">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:int" />
@@ -509,6 +527,28 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+        <xs:element name="Issue_with_projectName" msprop:Generator_TableClassName="Issue_with_projectNameDataTable" msprop:Generator_TableVarName="tableIssue_with_projectName" msprop:Generator_TablePropName="Issue_with_projectName" msprop:Generator_RowDeletingName="Issue_with_projectNameRowDeleting" msprop:Generator_RowChangingName="Issue_with_projectNameRowChanging" msprop:Generator_RowEvHandlerName="Issue_with_projectNameRowChangeEventHandler" msprop:Generator_RowDeletedName="Issue_with_projectNameRowDeleted" msprop:Generator_UserTableName="Issue_with_projectName" msprop:Generator_RowChangedName="Issue_with_projectNameRowChanged" msprop:Generator_RowEvArgName="Issue_with_projectNameRowChangeEvent" msprop:Generator_RowClassName="Issue_with_projectNameRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="id" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:int" />
+              <xs:element name="Name" msprop:Generator_ColumnVarNameInTable="columnName" msprop:Generator_ColumnPropNameInRow="Name" msprop:Generator_ColumnPropNameInTable="NameColumn" msprop:Generator_UserColumnName="Name">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Due_x0020_date" msprop:Generator_ColumnVarNameInTable="columnDue_date" msprop:Generator_ColumnPropNameInRow="Due_date" msprop:Generator_ColumnPropNameInTable="Due_dateColumn" msprop:Generator_UserColumnName="Due date" type="xs:dateTime" />
+              <xs:element name="Project" msprop:Generator_ColumnVarNameInTable="columnProject" msprop:Generator_ColumnPropNameInRow="Project" msprop:Generator_ColumnPropNameInTable="ProjectColumn" msprop:Generator_UserColumnName="Project">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:choice>
     </xs:complexType>
     <xs:unique name="Constraint1" msdata:PrimaryKey="true">
@@ -535,16 +575,21 @@ SELECT id, username, name, surname, rank, password FROM Users WHERE (id = @id)</
       <xs:selector xpath=".//mstns:Users" />
       <xs:field xpath="mstns:id" />
     </xs:unique>
+    <xs:unique name="Issue_with_projectName_Constraint1" msdata:ConstraintName="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Issue_with_projectName" />
+      <xs:field xpath="mstns:id" />
+    </xs:unique>
   </xs:element>
   <xs:annotation>
     <xs:appinfo>
-      <msdata:Relationship name="fk_issueId_to_issues" msdata:parent="Issues" msdata:child="Comments" msdata:parentkey="id" msdata:childkey="issue_id" msprop:Generator_UserChildTable="Comments" msprop:Generator_ChildPropName="GetCommentsRows" msprop:Generator_UserRelationName="fk_issueId_to_issues" msprop:Generator_ParentPropName="IssuesRow" msprop:Generator_RelationVarName="relationfk_issueId_to_issues" msprop:Generator_UserParentTable="Issues" />
-      <msdata:Relationship name="fk_userId_to_users" msdata:parent="Users" msdata:child="Comments" msdata:parentkey="id" msdata:childkey="user_id" msprop:Generator_UserChildTable="Comments" msprop:Generator_ChildPropName="GetCommentsRows" msprop:Generator_UserRelationName="fk_userId_to_users" msprop:Generator_ParentPropName="UsersRow" msprop:Generator_RelationVarName="relationfk_userId_to_users" msprop:Generator_UserParentTable="Users" />
-      <msdata:Relationship name="fk_assigneeId_to_users" msdata:parent="Users" msdata:child="Issues" msdata:parentkey="id" msdata:childkey="assignee_id" msprop:Generator_UserChildTable="Issues" msprop:Generator_ChildPropName="GetIssuesRows" msprop:Generator_UserRelationName="fk_assigneeId_to_users" msprop:Generator_ParentPropName="UsersRow" msprop:Generator_RelationVarName="relationfk_assigneeId_to_users" msprop:Generator_UserParentTable="Users" />
-      <msdata:Relationship name="fk_projectId_to_projects" msdata:parent="Projects" msdata:child="Issues" msdata:parentkey="id" msdata:childkey="project_id" msprop:Generator_UserChildTable="Issues" msprop:Generator_ChildPropName="GetIssuesRows" msprop:Generator_UserRelationName="fk_projectId_to_projects" msprop:Generator_ParentPropName="ProjectsRow" msprop:Generator_RelationVarName="relationfk_projectId_to_projects" msprop:Generator_UserParentTable="Projects" />
-      <msdata:Relationship name="fk_typeId_to_issueTypes" msdata:parent="Issue_types" msdata:child="Issues" msdata:parentkey="id" msdata:childkey="type_id" msprop:Generator_UserChildTable="Issues" msprop:Generator_ChildPropName="GetIssuesRows" msprop:Generator_UserRelationName="fk_typeId_to_issueTypes" msprop:Generator_RelationVarName="relationfk_typeId_to_issueTypes" msprop:Generator_UserParentTable="Issue_types" msprop:Generator_ParentPropName="Issue_typesRow" />
-      <msdata:Relationship name="fk_projectMembers_to_projects" msdata:parent="Projects" msdata:child="Project_members" msdata:parentkey="id" msdata:childkey="project_id" msprop:Generator_UserChildTable="Project_members" msprop:Generator_ChildPropName="GetProject_membersRows" msprop:Generator_UserRelationName="fk_projectMembers_to_projects" msprop:Generator_ParentPropName="ProjectsRow" msprop:Generator_RelationVarName="relationfk_projectMembers_to_projects" msprop:Generator_UserParentTable="Projects" />
-      <msdata:Relationship name="fk_projectMembers_to_user" msdata:parent="Users" msdata:child="Project_members" msdata:parentkey="id" msdata:childkey="user_id" msprop:Generator_UserChildTable="Project_members" msprop:Generator_ChildPropName="GetProject_membersRows" msprop:Generator_UserRelationName="fk_projectMembers_to_user" msprop:Generator_ParentPropName="UsersRow" msprop:Generator_RelationVarName="relationfk_projectMembers_to_user" msprop:Generator_UserParentTable="Users" />
+      <msdata:Relationship name="fk_issueId_to_issues" msdata:parent="Issues" msdata:child="Comments" msdata:parentkey="id" msdata:childkey="issue_id" msprop:Generator_UserChildTable="Comments" msprop:Generator_ChildPropName="GetCommentsRows" msprop:Generator_UserRelationName="fk_issueId_to_issues" msprop:Generator_RelationVarName="relationfk_issueId_to_issues" msprop:Generator_UserParentTable="Issues" msprop:Generator_ParentPropName="IssuesRow" />
+      <msdata:Relationship name="fk_userId_to_users" msdata:parent="Users" msdata:child="Comments" msdata:parentkey="id" msdata:childkey="user_id" msprop:Generator_UserChildTable="Comments" msprop:Generator_ChildPropName="GetCommentsRows" msprop:Generator_UserRelationName="fk_userId_to_users" msprop:Generator_RelationVarName="relationfk_userId_to_users" msprop:Generator_UserParentTable="Users" msprop:Generator_ParentPropName="UsersRow" />
+      <msdata:Relationship name="fk_assigneeId_to_users" msdata:parent="Users" msdata:child="Issues" msdata:parentkey="id" msdata:childkey="assignee_id" msprop:Generator_UserChildTable="Issues" msprop:Generator_ChildPropName="GetIssuesRows" msprop:Generator_UserRelationName="fk_assigneeId_to_users" msprop:Generator_RelationVarName="relationfk_assigneeId_to_users" msprop:Generator_UserParentTable="Users" msprop:Generator_ParentPropName="UsersRow" />
+      <msdata:Relationship name="fk_projectId_to_projects" msdata:parent="Projects" msdata:child="Issues" msdata:parentkey="id" msdata:childkey="project_id" msprop:Generator_UserChildTable="Issues" msprop:Generator_ChildPropName="GetIssuesRows" msprop:Generator_UserRelationName="fk_projectId_to_projects" msprop:Generator_RelationVarName="relationfk_projectId_to_projects" msprop:Generator_UserParentTable="Projects" msprop:Generator_ParentPropName="ProjectsRow" />
+      <msdata:Relationship name="fk_typeId_to_issueTypes" msdata:parent="Issue_types" msdata:child="Issues" msdata:parentkey="id" msdata:childkey="type_id" msprop:Generator_UserChildTable="Issues" msprop:Generator_ChildPropName="GetIssuesRows" msprop:Generator_UserRelationName="fk_typeId_to_issueTypes" msprop:Generator_ParentPropName="Issue_typesRow" msprop:Generator_RelationVarName="relationfk_typeId_to_issueTypes" msprop:Generator_UserParentTable="Issue_types" />
+      <msdata:Relationship name="fk_projectMembers_to_projects" msdata:parent="Projects" msdata:child="Project_members" msdata:parentkey="id" msdata:childkey="project_id" msprop:Generator_UserChildTable="Project_members" msprop:Generator_ChildPropName="GetProject_membersRows" msprop:Generator_UserRelationName="fk_projectMembers_to_projects" msprop:Generator_RelationVarName="relationfk_projectMembers_to_projects" msprop:Generator_UserParentTable="Projects" msprop:Generator_ParentPropName="ProjectsRow" />
+      <msdata:Relationship name="fk_projectMembers_to_user" msdata:parent="Users" msdata:child="Project_members" msdata:parentkey="id" msdata:childkey="user_id" msprop:Generator_UserChildTable="Project_members" msprop:Generator_ChildPropName="GetProject_membersRows" msprop:Generator_UserRelationName="fk_projectMembers_to_user" msprop:Generator_RelationVarName="relationfk_projectMembers_to_user" msprop:Generator_UserParentTable="Users" msprop:Generator_ParentPropName="UsersRow" />
+      <msdata:Relationship name="fk_issueId_to_issues1" msdata:parent="Issue_with_projectName" msdata:child="Comments" msdata:parentkey="id" msdata:childkey="issue_id" msprop:Generator_UserChildTable="Comments" msprop:Generator_ChildPropName="GetCommentsRows" msprop:Generator_UserRelationName="fk_issueId_to_issues1" msprop:Generator_RelationVarName="relationfk_issueId_to_issues1" msprop:Generator_UserParentTable="Issue_with_projectName" msprop:Generator_ParentPropName="Issue_with_projectNameRow" />
     </xs:appinfo>
   </xs:annotation>
 </xs:schema>

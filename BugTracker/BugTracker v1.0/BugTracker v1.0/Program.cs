@@ -18,7 +18,10 @@ namespace BugTracker_v1._0
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            var controller = new BugController();
+            var mainForm = new MainForm();
+            controller.BugProcess = mainForm;
+            Application.Run(mainForm);
         }
 
         public static void InvokeIfRequired(this ISynchronizeInvoke obj, MethodInvoker action)

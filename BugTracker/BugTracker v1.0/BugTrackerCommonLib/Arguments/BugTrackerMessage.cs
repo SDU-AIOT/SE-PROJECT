@@ -11,7 +11,7 @@ namespace BugTrackerCommonLib
     [Serializable]
     public class BugTrackerMessage
     {
-        public static int NEW_ISSUE = 1, NEW_USER = 2, NEW_PROJECT = 3;
+        public static readonly int NEW_ISSUE = 1, NEW_USER = 2, NEW_PROJECT = 3;
         private int messageType;
         /// <summary>
         /// Message text.

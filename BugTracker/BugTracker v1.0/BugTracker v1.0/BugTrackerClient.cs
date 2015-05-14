@@ -10,21 +10,18 @@ namespace BugTracker_v1._0
 {
     class BugTrackerClient : IBugTrackerClient
     {
-        private  MainForm _mainForm;
+        private readonly IBugProcessView _mainForm;
         /// <summary>
         /// Creates a new BugTrackerClient.
         /// </summary>
-        public BugTrackerClient(MainForm mainForm) 
+        public BugTrackerClient(IBugProcessView mainForm) 
         {
             _mainForm = mainForm;
         }
 
         public void GetUserList(UserInfo[] users)
         {
-            foreach (var user in users)
-            {
-
-            }
+            
         }
 
         /// <summary>
@@ -35,7 +32,7 @@ namespace BugTracker_v1._0
         /// <param name="message">Message text</param>
         public void OnMessageToEverybody(string username, BugTrackerMessage message)
         {
-            _mainForm.OnMessageReceived(BugTrackerMessage message);
+            _mainForm.OnMessageReceived(username, message);
         }
 
         public void OnUserLogin(UserInfo userInfo)

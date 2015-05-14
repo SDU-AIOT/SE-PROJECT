@@ -2,6 +2,14 @@
     
     
     public partial class BugTrackerDBDataSet {
+        partial class IssuesDataTable
+        {
+        }
+    
+        partial class DataTable1DataTable
+        {
+        }
+    
         partial class UsersDataTable
         {
         }

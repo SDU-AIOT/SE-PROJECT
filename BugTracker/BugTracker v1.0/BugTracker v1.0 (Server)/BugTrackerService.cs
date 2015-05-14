@@ -92,8 +92,8 @@ namespace BugTracker_v1._0__Server_
                 () =>
                 {
                     OnUserListChanged();
-                    SendUserListToClient(bugTrackerClient);
-                    SendUserLoginInfoToAllClients(userInfo);
+                    //SendUserListToClient(bugTrackerClient);
+                    //SendUserLoginInfoToAllClients(userInfo);
                 });
                 return true;
             }
@@ -125,7 +125,6 @@ namespace BugTracker_v1._0__Server_
                         }
                         catch
                         {
-
                         }
                     }
                 });
